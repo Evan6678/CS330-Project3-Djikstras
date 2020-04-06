@@ -26,6 +26,7 @@ private:
 	RequestType* getRequestFromSingletonListById(int idParam);																					//get a request from the list by id
 	list<ConnectorType*> getAllConnectorsFromNodeById(int idParam);																				//get a list of all the connections from a given node by Id
 	bool addConnectorToSourceNode(int nodeId, ConnectorType* connector);																		//Add a connector reference to the array in the source node
+	bool addDjikstraConnectorToSourceNode(int nodeId, ConnectorType* connector);																//add the shortest path options to source nodes while performing Dijkstra alg
 
 public:
 	static NodeTreeSingleton* getInstance();		//get the instance of the singleton if exists

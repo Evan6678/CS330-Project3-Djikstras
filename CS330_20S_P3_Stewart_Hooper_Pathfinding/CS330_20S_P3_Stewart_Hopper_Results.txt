@@ -246,7 +246,7 @@ R 33 27
 =====================================================
 =====================================================
 
-==>Full Djikstras mapped connectors for shortest path to all nodes
+==>All Djikstras mapped connectors for shortest path to all nodes
 =====================================================
 =>Connector List
 

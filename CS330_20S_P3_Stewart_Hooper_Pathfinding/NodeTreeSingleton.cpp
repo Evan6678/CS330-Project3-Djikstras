@@ -74,10 +74,24 @@ bool NodeTreeSingleton::addConnectorToSourceNode(int nodeId, ConnectorType* conn
 	return true;
 }
 
+bool NodeTreeSingleton::addDjikstraConnectorToSourceNode(int nodeId, ConnectorType* connector)
+{
+	try {
+		NodeType* sourceNode = getNodeFromSingletonNodeListById(nodeId);
+		sourceNode->addDjikstraConnectors(connector);
+	}
+	catch (...) {
+		return false;
+	}
+	return true;
+}
+
 bool NodeTreeSingleton::addConnectorToSingletonDjikstraConnectorListById(int connectorId)
 {
 	try {
 		ConnectorType* connector = getConnectorFromSingletonListById(connectorId);
+		addDjikstraConnectorToSourceNode(connector->getsourceNode()->getId(), connector);
+
 		djikstraConnectorList.push_back(connector);
 	}
 	catch (...) {

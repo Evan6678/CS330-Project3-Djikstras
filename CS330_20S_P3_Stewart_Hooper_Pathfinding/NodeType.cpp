@@ -15,6 +15,11 @@ void NodeType::addConnection(ConnectorType* newConnection)
 	sourceConnections.push_back(newConnection);
 }
 
+void NodeType::addDjikstraConnectors(ConnectorType* newConnection)
+{
+	djikstraConnections.push_back(newConnection);
+}
+
 void NodeType::setHasBeenTraversedFlag(bool flag)
 {
 	hasBeenTraversed = flag;
@@ -53,4 +58,9 @@ string NodeType::getName()
 list<ConnectorType*> NodeType::getSourceConnectionList()
 {
 	return sourceConnections;
+}
+
+list<ConnectorType*> NodeType::getDjikstraConnectors()
+{
+	return djikstraConnections;
 }

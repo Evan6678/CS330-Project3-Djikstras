@@ -17,11 +17,13 @@ private:
 	bool hasBeenTraversed;								//will be true when the node is is accessed while finding shortest path
 	string name;										//String defined name
 	list<ConnectorType*>sourceConnections;				//list of connections where this node is the source
+	list<ConnectorType*>djikstraConnections;			//list of connections where this node is the source
 
 public:
 	NodeType(int idParam, char symbolParam, int xCordParam, int yCordParam, string nameParam);			//constructor to load the data
 
 	void addConnection(ConnectorType* newConnection);													//add a new connection
+	void addDjikstraConnectors(ConnectorType* newConnection);											//add new djikstra connection
 	void setHasBeenTraversedFlag(bool flag);
 
 	int getId();																						//get the id of node
@@ -31,5 +33,6 @@ public:
 	bool getHasBeenTraversed();																			//get the boolean for if the node has been accessed
 	string getName();																					//get the name of node
 	list<ConnectorType*> getSourceConnectionList();														//get the list of source connections
+	list<ConnectorType*> getDjikstraConnectors();														//get the list of shortest path connections
 };
 

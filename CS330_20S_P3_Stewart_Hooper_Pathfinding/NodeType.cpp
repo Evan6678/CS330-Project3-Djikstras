@@ -8,6 +8,7 @@ NodeType::NodeType(int idParam, char symbolParam, int xCordParam, int yCordParam
 	yCord = yCordParam;
 	name = nameParam;
 	hasBeenTraversed = false;
+	hasBeenExhastedInRequest = false;
 }
 
 void NodeType::addConnection(ConnectorType* newConnection)
@@ -23,6 +24,11 @@ void NodeType::addDjikstraConnectors(ConnectorType* newConnection)
 void NodeType::setHasBeenTraversedFlag(bool flag)
 {
 	hasBeenTraversed = flag;
+}
+
+void NodeType::setHasBeenExhastedInRequest(bool flag)
+{
+	hasBeenExhastedInRequest = flag;
 }
 
 int NodeType::getId()
@@ -48,6 +54,11 @@ int NodeType::getYCord()
 bool NodeType::getHasBeenTraversed()
 {
 	return hasBeenTraversed;
+}
+
+bool NodeType::getHasBeenExhastedInRequest()
+{
+	return hasBeenExhastedInRequest;
 }
 
 string NodeType::getName()

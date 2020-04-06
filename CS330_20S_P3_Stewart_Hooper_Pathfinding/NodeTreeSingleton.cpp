@@ -86,6 +86,13 @@ bool NodeTreeSingleton::addDjikstraConnectorToSourceNode(int nodeId, ConnectorTy
 	return true;
 }
 
+void NodeTreeSingleton::resetAllNodesExhaustedFlag()
+{
+	for (list<NodeType*>::iterator it = nodeList.begin(); it != nodeList.end(); it++) {
+		(*it)->setHasBeenExhastedInRequest(false);
+	}
+}
+
 bool NodeTreeSingleton::addConnectorToSingletonDjikstraConnectorListById(int connectorId)
 {
 	try {
@@ -198,6 +205,62 @@ int NodeTreeSingleton::getShortestPathFromSingletonPossibleConnectorsList()
 	return returnConnector->getId();
 }
 
+list<NodeType*> NodeTreeSingleton::getShortestPathBetweenTwoNodesById(int nodeOne, int nodeTwo)
+{
+	NodeType* currentNode = getNodeFromSingletonNodeListById(nodeOne);
+	ConnectorType* currentConnector = NULL;
+	NodeType* endNode = getNodeFromSingletonNodeListById(nodeTwo);
+
+	list<NodeType*> requestShortestPath;
+
+	//while we havnet found the end node keep traversing
+	while (currentNode != endNode) {
+		
+		//if the node we are on has no djikstra connectors on the list then it is an end node, backtrack up the tree to continue traversing
+		if (currentNode->getDjikstraConnectors().size() == 0) {
+			currentNode->setHasBeenExhastedInRequest(true);
+			requestShortestPath.remove(currentNode);
+			currentNode = requestShortestPath.back();
+		}
+		else {
+			//find the smallest cost connector to current node that has not been exhausted to traverse next
+			int cost = 99999;
+
+			list<ConnectorType*> node1PathsList = currentNode->getDjikstraConnectors();
+
+			for (list<ConnectorType*>::iterator it = node1PathsList.begin(); it != node1PathsList.end(); it++) {
+				if ((*it)->getCost() < cost && !(*it)->getdestinationNode()->getHasBeenExhastedInRequest()) {
+					cost = (*it)->getCost();
+					currentConnector = (*it);
+				}
+			}
+
+			//if the for loop did not find a connector that has not been exhausted then cost = 99999 so we know this node has been exhausted
+			if (cost == 99999) {
+				currentNode->setHasBeenExhastedInRequest(true);
+				requestShortestPath.remove(currentNode);
+				currentNode = requestShortestPath.back();
+			}
+			//else we know the current node has not been fully traversed so dig down into its children nodes
+			else {
+
+				//add the current node onto the list stack if it doenst exist already
+				if (requestShortestPath.size() == 0 || requestShortestPath.back() != currentNode) {
+					requestShortestPath.push_back(currentNode);
+				}
+
+				//make the current node the next node in the connection
+				currentNode = currentConnector->getdestinationNode();
+			}
+		}
+	}
+
+	//once current node == end node push onto stack and return 
+	requestShortestPath.push_back(currentNode);
+	resetAllNodesExhaustedFlag();
+	return requestShortestPath;
+}
+
 list<ConnectorType*> NodeTreeSingleton::getAllConnectorsFromNodeById(int idParam)
 {
 	NodeType* node = getNodeFromSingletonNodeListById(idParam);
@@ -300,6 +363,7 @@ bool NodeTreeSingleton::hasAllNodesBeenMapped()
 	return true;
 }
 
-
-
-
+void NodeTreeSingleton::clearDjikstraConnectorList()
+{
+	djikstraConnectorList.empty();
+}

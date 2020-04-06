@@ -227,6 +227,7 @@ C 39 37 25
 #
 # Path requests: R start.node goal.node
 #
+R  1 33
 R  1 59
 R 45 66
 R 60  9

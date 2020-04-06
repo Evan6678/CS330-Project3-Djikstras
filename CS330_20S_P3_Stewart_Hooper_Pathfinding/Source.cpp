@@ -10,8 +10,10 @@
 using namespace std;
 
 void readAndLoadData(string , NodeTreeSingleton*);
-void dijkstaShortestPath(NodeTreeSingleton*);
+void dijkstaShortestPath(NodeTreeSingleton*, int);
+void findPathRequests(NodeTreeSingleton*);
 void outputData(NodeTreeSingleton*);
+
 
 int main() {
 
@@ -24,8 +26,8 @@ int main() {
 	//read in the data from the input file into the 
 	readAndLoadData(userInputFile, nodeCollectionSingleton);
 
-	//use dijsktra to traverse nodes and get shortest paths
-	dijkstaShortestPath(nodeCollectionSingleton);
+	//get the request paths from the dikstra map
+	findPathRequests(nodeCollectionSingleton);
 
 	//output data to output file
 	outputData(nodeCollectionSingleton);
@@ -81,8 +83,16 @@ void readAndLoadData(string fileName, NodeTreeSingleton* nodeCollectionSingleton
 	}
 }
 
-void dijkstaShortestPath(NodeTreeSingleton* nodeCollectionSingleton) {
-	int currentNodeId = 1;
+void findPathRequests(NodeTreeSingleton* nodeCollectionSingleton) {
+	for (int x = 1; x < nodeCollectionSingleton->getRequestListLength(); x++) {
+		dijkstaShortestPath(nodeCollectionSingleton, nodeCollectionSingleton->getRequestSourceNodeIdById(x));
+		nodeCollectionSingleton->getShortestPathBetweenTwoNodesById(nodeCollectionSingleton->getRequestSourceNodeIdById(x), nodeCollectionSingleton->getRequestDestinationNodeIdById(x));
+		nodeCollectionSingleton->clearDjikstraConnectorList();
+	}
+}
+
+void dijkstaShortestPath(NodeTreeSingleton* nodeCollectionSingleton, int startNode) {
+	int currentNodeId = startNode;
 	int currentConnectorId = 0;
 	
 	//while we still have a node that is not mapped we continue to map shortest path algorithm 

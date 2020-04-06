@@ -16,7 +16,6 @@ private:
 	list<ConnectorType*> connectorList;																											//List of all connectors
 	list<ConnectorType*> djikstraConnectorList;																									//List of the refined connectors to map the shortest path
 	list<RequestType*> requestList;																												//List of all requests
-
 	list<ConnectorType*> possibleConnectorList;																									//As we perform shortest path algorithm we keep track of the list of possible paths we can take
 
 	NodeTreeSingleton();																														//singleton constructor, inits data to empty state
@@ -27,7 +26,7 @@ private:
 	list<ConnectorType*> getAllConnectorsFromNodeById(int idParam);																				//get a list of all the connections from a given node by Id
 	bool addConnectorToSourceNode(int nodeId, ConnectorType* connector);																		//Add a connector reference to the array in the source node
 	bool addDjikstraConnectorToSourceNode(int nodeId, ConnectorType* connector);																//add the shortest path options to source nodes while performing Dijkstra alg
-
+	void resetAllNodesExhaustedFlag();																											//after a traversal reset the all the nodes exhausted flag
 public:
 	static NodeTreeSingleton* getInstance();		//get the instance of the singleton if exists
 	static NodeTreeSingleton* getNewInstance();		//gets a new instance and throws out all old data
@@ -45,7 +44,9 @@ public:
 	int getConnectorDestinationNodeIdByConnectorId(int connectorId);																			//return the destination node id from the connection between 2 nodes
 
 	int getShortestPathFromSingletonPossibleConnectorsList();																					//loop through and find the shortest path in the possible connectors list to return id of connector
-																										
+	
+	list<NodeType*> getShortestPathBetweenTwoNodesById(int nodeOne, int nodeTwo);																		//loop throgh and find shortest path between nodes
+
 	int getNodeListLength();																													//get the length of the respective list
 	int getConnectorListLength();																												//get the length of the respective list
 	int getDjikstraConnectorListLength();																										//get the length of the respective list
@@ -66,6 +67,6 @@ public:
 	int getRequestDestinationNodeIdById(int idParam);
 
 	bool hasAllNodesBeenMapped();																												//checks all the nodes if they have been mapped, returns true if they have all been accessed
-
+	void clearDjikstraConnectorList();
 };
 
